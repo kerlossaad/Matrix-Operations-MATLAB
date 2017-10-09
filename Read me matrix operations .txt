@@ -1,0 +1,712 @@
+
+
+PROJECT 5 DESCRIPTION:
+
+Write a C++ class definition called MATRIX whose prototype is defined 
+as follows:
+
+class MATRIX: public PROGRAM_BANK{
+
+	friend MATRIX operator / (int, MATRIX &); 
+				// FRIEND FUNCTION; example: 5 / X;
+				// Compute inverse of X using INHERITANCE;
+				// Multiply each element of inverted matrix
+				// by 5; 
+				// store the results into a temp MATRIX;
+				// return the temp MATRIX;
+	
+	friend MATRIX operator * (int, MATRIX &); 
+				// FRIEND FUNCTION; example: 5 * X;
+				// each element of the matrix X is 
+				// multiplied by 5;
+				// store the results into a temp MATRIX;
+				// return the temp MATRIX;
+
+	public:	// public methods for this class
+	
+	  MATRIX (int, int); 	// constructor;
+				// example: MATRIX X(d1,d2);
+			   	// creates a matrix object with
+			   	// private variables dim1 = d1 and dim2 = d2
+			  	// and initializes each element to 0;
+  
+	  MATRIX(int, int, char *); 
+	  			// constructor;
+				// example: MATRIX X(d1,d2,"in_name");
+				// read the elements of the matrix
+				// from a given file in_name; d1 and d2 are 
+				// the two dimensions of the matrix;
+				
+	  void PRINT();		// example: X.PRINT();
+				// print the elements of the matrix X
+				// into out.5 file;
+				// returns no values;
+
+	  int  operator < (int); //example: if( X < b)
+				// check if the minimum element of the matrix X
+				// is less than b
+				// returns 1 if so; returns 0 otherwise;
+		
+	  void operator = (MATRIX);
+	  			// example X = Y;
+				// Copy Y to X;
+				// returns no values;		
+		
+	  void operator += (MATRIX &);  
+	  			// example: X += Y;
+                        	// matrix addition;
+                        	// store the results in X;
+				// values of Y remain unchanged;
+				// returns no values;
+		
+	  void operator *= (MATRIX &); 
+	  			// example: X *= Y;
+				// matrix multiplication;
+				// store the results in X;
+				// values of Y remain unchanged;
+				// returns no values;
+
+	  MATRIX operator + (MATRIX &); 
+	  			// example: X + Y;
+				// Create a temp matrix object; 
+				// add each element of Y to each element of X;
+				// return this temp matrix object;
+				// values of X and Y remain unchanged;
+
+	  MATRIX operator * (MATRIX &); 
+	  			// example: X * Y;
+				// matrix multiplication;
+				// store the results into a temp matrix
+				// and return this temp matrix;
+				// values of Y remain unchanged;
+
+	  MATRIX operator / (MATRIX &); 
+	  			// example: X / Y;
+				// get inverse of Y and multiply it with X;
+				// put the results into a temp MATRIX
+				// and return temp MATRIX;
+				// X and Y remain unchanged;
+				// USE INHERITENCE FOR MATRIX INVERSION;
+	
+	private:
+
+  	  int dim1, dim2; 	// dimensions of the matrix;
+				// if dim2 is 1, a vector (no need for special
+				// handling of vectors; everything should work
+				// for both matrices and vectors)
+  	  double A[20][20]; 	// 2 dimensional array for the matrix elements;
+	  char in_file[11]; 	// hold the input file name
+ };
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+The definition of the constructor MATRIX is as follows:
+
+	MATRIX X(d1, d2);	
+
+where d1 and d2 should be stored in dim1 and dim2 respectively. 
+Initialize all elements of A to 0.  
+
+Here is a way to write the header for the constructor in order to use
+inheritance
+	MATRIX::MATRIX(int d1, int d2)
+		: PROGRAM_BANK(d1)
+	{
+		your constructor code goes here
+	}
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+The definition of the constructor MATRIX is as follows:
+
+	MATRIX X(d1, d2, "in_name");	
+
+where  dim1 and dim2 (both integers, 1 <= dim1,dim2 <= 20) are the dimensions 
+of the matrix, and in_name is (char string) the name of the input file.
+
+The format of the matrix in the input file is:
+
+	x_0_0		x_0_1		...	x_0_dim2-1
+	x_1_0		x_1_1		...	x_1_dim2-1
+	...
+	x_dim1-1_0 	x_dim1-1_1 	... 	x_dim1-1_dim2-1
+
+where x_i_j are double numbers.
+
+In order to use the inheritance, your constructor must have the
+following information:
+
+	MATRIX::MATRIX(int d1, int d2, char * file_name)
+		: PROGRAM_BANK(d1, file_name)
+	{
+		your constructor code goes here
+	}
+
+After reading the values successfully, the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> CREATED A dim1 X dim2 MATRIX FROM file_name
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If there are errors in the input file data, the output to out.5 is:
+ 		
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> INPUT ERROR
+	+++ P5_OUTPUT >>> UNABLE TO CREATE MATRIX
+	+++ P5_OUTPUT >>> EXITING PROGRAM
+      	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+
+After this message, the program terminates (i.e., exits).
+ 
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH AN endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+The overloaded operator / is declared as a friend function of the
+class since the first argument is not an object of the class. An example is:
+
+	c / X
+
+where c is an integer and X is an object of class MATRIX. First compute
+the inverse of X using inherited class PROGRAM_BANK. Then multiply each
+element of inverted matrix by c and store it in a temp MATRIX. Return temp. 
+
+In your code of friend function operator /, you can run INVERT_MATRIX
+method of PROGRAM_BANK as follows:
+
+      friend MATRIX operator / (int x, MATRIX & a_matrix)
+	{
+		...
+		a_matrix.PROGRAM_BANK::INVERT_MATRIX("OUT_5_TEMP");
+		...
+	}
+
+INVERT_MATRIX writes the inverted matrix into OUT_5_TEMP file with the
+following format:
+
+        inv_0_0 	inv_0_1 	... 	inv_0_dim1-1
+        ...
+        inv_dim1-1_0 	inv_dim1_1 	... 	inv_dim1-1_dim1-1
+
+You need to open OUT_5_TEMP file and read the elements of the inverted matrix
+into a temporary matrix. (NOTE THAT OUT_5_TEMP IS A FIXED NAME AND CANNOT BE 
+CHANGED).
+
+The expected output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> THE RESULT OF c / X OPERATION IS:
+	b_0_0   	b_0_1    ... b_0_d1-1
+	...
+	b_d1-1_0   	b_d1-1_1 ... b_d1-1_d1-1
+      	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+where b_i_j is the element of the inverted matrix after it is multiplied
+by integer c. 
+
+MAKE SURE THAT EVERY LINE TO out.5 ENDS WITH A endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+The overloaded operator * is declared as a friend function of the
+class since the first argument is not an object of the class. 
+An example is :
+
+	c * X
+
+where c is an integer and X is an object of class MATRIX. Each element of X 
+is multiplied by c and store the results in a temp MATRIX. Return temp. 
+
+The expected output to out.5 is:
+	
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> THE RESULT OF c * X OPERATION IS:
+	b_0_0   	b_0_1    ... b_0_d2-1
+	...
+	b_d1-1_0   	b_d1-1_1 ... b_d1-1_d2-1
+      	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+where b_i_j is the element of the matrix after integer c multiplies 
+each element of X.
+
+MAKE SURE THAT EVERY LINE TO out.5 ENDS WITH A endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+The definition of PRINT method is as follows:
+
+	X.PRINT();
+
+Print the contents of the X matrix into out.5 with the following format:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+	x_0_0 		x_0_1		...	x_0_dim2-1
+	x_1_0 		x_1_1		...	x_1_dim2-1
+	...
+	x_dim1-1_0 	x_dim1-1_1 	... 	x_dim1-1_dim2-1
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+MAKE SURE THAT EVERY LINE TO out.5 ENDS WITH A endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+An example use of overloaded operator < method is as follows:
+
+	if (X < b)
+
+where X is an object of class MATRIX and b is an integer. This method 
+checks if the minimum element of X is less than b.  If so, it returns 1 
+with the following output to out.5:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR < RETURNING TRUE
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+Otherwise, it returns 0 with the following output to out.5:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR < RETURNING FALSE
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+MAKE SURE THAT EVERY LINE TO out.5 ENDS WITH A endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ 
+
+An example of overloaded operator = between two MATRIX objects is:
+
+  	X = Y; 
+
+which checks if the dimensions of X and Y objects of class MATRIX are equal.
+If so, it copies elements of Y into elements of X. Y remains unchanged.
+The output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If the dimensions do not match, the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT>>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+    
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+ An example of overloaded operator += between two MATRIX objects is:
+ 
+        X += Y;
+ 
+where X and Y are objects of class MATRIX.  This operator adds X and Y
+element by element, stores the results into X. If the dimensions are 
+compatible, the output to out.5 is:
+	
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR += COMPLETED
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If the dimenstions do not match, the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT >>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+
+Note that the values Y remain unchanged.
+
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+ An example of overloaded operator *= between two MATRIX objects is:
+ 
+        X *= Y;
+ 
+where X and Y are objects of class MATRIX.  This operator multiplies Matrix X 
+and Matrix Y, stores the results into X. If the dimensions 
+are compatible, the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR *= COMPLETED
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If the dimenstions do not match the output to out.5 is:
+	
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT >>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+
+Note that the values Y remain unchanged.
+
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+ An example of overloaded operator + is:
+ 
+        X + Y;
+ 
+where X and Y are objects of class MATRIX.  This operator creates a temporary
+matrix object, adds Y[i][j] to X[i][j] and stores the results in the temporary
+object. It then returns this object. If the dimensions of X and Y match, the 
+output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR + COMPLETED
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If the dimenstions do not match the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT >>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+
+Note that the values of X and Y remain unchanged.
+
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+An example of overloaded operator * between two MATRIX objects is:
+ 
+        X * Y;
+ 
+where X and Y are objects of class MATRIX.  This operator multiplies Matrix X 
+and Matrix Y, stores the results into a temp matrix and returns
+the temp matrix. If the dimensions are compatible, the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR * COMPLETED
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+If the dimenstions do not match the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT >>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+An example of the overloaded operator / between two MATRIX objects is:
+
+	X / Y
+
+The inverse of Y is computed by using inherited class PROGRAM_BANK as
+follows:
+
+In your code of overloaded operator /, you can run INVERT_MATRIX
+method of PROGRAM_BANK as follows:
+
+        MATRIX MATRIX operator / (MATRIX & a_matrix)
+	{
+		...
+		a_matrix.PROGRAM_BANK::INVERT_MATRIX("OUT.5.TEMP");
+		...
+	}
+
+INVERT_MATRIX writes the inverted matrix into OUT.5.TEMP file with the
+following format:
+
+        inv_0_0 	inv_0_1 	... 	inv_0_dim1-1
+        ...
+        inv_dim1-1_0 	inv_dim1_1 	... 	inv_dim1-1_dim1-1
+
+You need to open OUT.5.TEMP file and read the elements of the inverted 
+matrix into a temporary matrix. (NOTE THAT OUT.5.TEMP IS A FIXED NAME AND 
+CANNOT BE CHANGED).
+
+The expected output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> OVERLOADED OPERATOR / COMPLETED
+	+++ P5_OUTPUT >>> THE RESULT OF X/Y OPERATION IS:
+	b_0_0   	b_0_1    ... b_0_d1-1
+	...
+	b_d1-1_0   	b_d1-1_1 ... b_d1-1_d1-1
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+where b_i_j is the element of the inverted matrix after the multiplication 
+is complete.
+
+If the dimenstions do not match the output to out.5 is:
+
+	+++ P5 START +++++++++++++++++++++++++++++++++++++++++
+	+++ P5_OUTPUT >>> ERROR
+	+++ P5_OUTPUT >>> INCOMPATIBLE MATRICES
+	+++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+
+After this error message, the program continues (i.e., do not exit the 
+program).
+
+MAKE SURE THAT EVERY LINE YOUR WRITE INTO out.5 ENDS WITH endl.
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+ 
+ :::::::::::::: EXAMPLE 1 ::::::::::::::::::::: 
+//Example of program : main1.cc
+#include <iostream>
+#include "p5.h"
+int main ()
+{
+	MATRIX X(2,2, "in.51"), Y(2,2, "in52"), Z(2,2, "in.52");
+
+	if (X < 2)
+	{}
+	else
+	{
+		Y.PRINT(); // shouldn't print;
+	}
+
+	Z = X + Y;
+
+	if (Z < 5)
+	{
+		Y.PRINT(); // print;
+	}
+	else
+	{}
+
+	Z.PRINT(); // print;
+	
+	return 0;
+}
+---------------CONTENTS OF in.51 FILE-----------------
+1 1 
+1 1
+---------------CONTENTS OF in.52 FILE-----------------
+2 2
+2 2
+---------------EXPECTED CONTENTS OF out.5 FILE-----------------
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.51
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.52
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.52
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR < RETURNING TRUE
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR + COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR < RETURNING TRUE
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+2.00 2.00
+2.00 2.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+3.00 3.00
+3.00 3.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+:::::::::::::: EXAMPLE 2 ::::::::::::::::::::: 
+//Example of program : main2.cc
+#include <iostream>
+#include "p5.h"
+int main ()
+{
+	MATRIX X(2,2,"in.51"), Y(2,2, "in.52"), Z(2,2);
+
+	Z = X*Y;
+	Z.PRINT();
+	
+	Z = X+Y;
+	Z.PRINT();
+	
+	return 0;
+}
+---------------CONTENTS OF in.51 FILE-----------------
+1 1 
+1 1
+---------------CONTENTS OF in.52 FILE-----------------
+2 2
+2 2
+---------------EXPECTED CONTENTS OF out.5 FILE--------
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.51
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.52
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR * COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+4.00 4.00
+4.00 4.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR + COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+3.00 3.00
+3.00 3.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+:::::::::::::: EXAMPLE 3 ::::::::::::::::::::: 
+//Example of program : main3.cc
+#include <iostream>
+#include "p5.h"
+int main ()
+{
+	MATRIX X(2,2, "in.51"), Y(2,2, "in.52");
+
+	X.PRINT();
+	
+	X *= Y;
+	
+	Y.PRINT();
+	X.PRINT();
+	
+	return 0;
+}
+---------------CONTENTS OF in.51 FILE-----------------
+5 4 
+2 3
+---------------CONTENTS OF in.52 FILE-----------------
+3 4
+2 10
+---------------EXPECTED CONTENTS OF out.5 FILE--------
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.51
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.52
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+5.00 4.00
+2.00 3.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR *= COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+3.00 4.00
+2.00 10.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+23.00 60.00
+12.00 38.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+:::::::::::::: EXAMPLE 4 ::::::::::::::::::::: 
+//Example of program : main4.cc
+#include <iostream>
+#include "p5.h"
+int main ()
+{
+	MATRIX X(2,2, "in.51"), Y(2,2, "in.52"), Z(2,2);
+
+	Z.PRINT();
+	
+	Z = X/ Y;
+	Z.PRINT();
+	
+	Z = 3/Y;
+	Z.PRINT();
+
+	Z = 3 * Y;
+	Z.PRINT();
+	
+	return 0;
+}
+---------------CONTENTS OF in.51 FILE-----------------
+1 2 
+3 4
+---------------CONTENTS OF in.52 FILE-----------------
+3 4
+1 2
+---------------EXPECTED CONTENTS OF out.5 FILE--------
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.51
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CREATED A 2 X 2 MATRIX FROM in.52
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+0.00 0.00
+0.00 0.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR / COMPLETED
++++ P5_OUTPUT >>> THE RESULT OF X/Y OPERATION IS:
+0.00 1.00
+1.00 0.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+0.00 1.00
+1.00 0.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> THE RESULT OF 3 / X OPERATION IS:
+3.00   -6.00
+-1.50   4.50
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+3.00   -6.00
+-1.50   4.50
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> THE RESULT OF 3 * X OPERATION IS:
+9.00 12.00
+3.00  6.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> OVERLOADED OPERATOR = COMPLETED
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
++++ P5 START +++++++++++++++++++++++++++++++++++++++++
++++ P5_OUTPUT >>> CONTENTS OF MATRIX IS:
+9.00 12.00
+3.00  6.00
++++ P5 END +++++++++++++++++++++++++++++++++++++++++++
+ 
